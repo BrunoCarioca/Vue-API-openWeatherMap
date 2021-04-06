@@ -1,9 +1,9 @@
-<template>
+<template >
   <q-layout view="hHh Lpr lFf" class="bg fixed-center">
    <q-page-container>
       <Header></Header>
       <q-scroll-area style="height: 95vh; max-width: 394px;">
-      <Banner  v-if="this.temperatura != ''"  :list="this.list" :temp="this.temperatura" :weather="this.weather" ></Banner>
+      <Banner  v-if="this.temperatura != ''"  :today="this.today" :temp="this.temperatura" :forecast="this.days" ></Banner>
     </q-scroll-area>
     </q-page-container>
   </q-layout>
@@ -33,7 +33,7 @@ export default {
         city_long: ''
       },
       tempo: [],
-      list: [],
+      today: [],
       days: [],
       temperatura: '',
       weather: [],
@@ -46,7 +46,7 @@ export default {
      
     this.currentRequest();
     setTimeout(() => {
-        this.temperatura = Math.round(this.list["main"]["temp"]);
+        this.temperatura = Math.round(this.today["main"]["temp"]);
         console.log("lat: " + this.coord.city_lat + " long:" + this.coord.city_long);
         this.forecastRequest(this.coord.city_lat, this.coord.city_long);
     },3000);
@@ -62,22 +62,22 @@ export default {
       .then(res => res.json())
       .then(tempo => {
         this.tempo = tempo;
-        this.list = this.tempo.list[0];
-        this.weather = this.list.weather[0];
-        this.coord.city_lat = this.list["coord"]["lat"];
-        this.coord.city_long = this.list["coord"]["lon"];
+        this.today = this.tempo.list[0];
+        this.weather = this.today.weather[0];
+        this.coord.city_lat = this.today["coord"]["lat"];
+        this.coord.city_long = this.today["coord"]["lon"];
       });
       },1000);
     },
 
     forecastRequest: function (lat, long){
       setTimeout(() => {
-        this.$http.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&exclude=current,minutely,hourly,alerts&lang=pt_br&appid=${this.apiKey}`)
+        this.$http.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=metric&exclude=current,minutely,hourly,alerts&lang=pt_br&appid=${this.apiKey}`)
         .then(res => res.json())
         .then(tempo => {
           this.tempo = tempo;
           this.days  = tempo.daily;
-          console.log(this.days[0]["dt"]);
+          console.log(this.days);
         });
       }, 1000);
     }
@@ -92,6 +92,8 @@ export default {
   .bg {
     background-image: url('./assets/bg.jpg');
     max-width: 394px;
+    background-size: cover;
+    
   }
 
 </style>

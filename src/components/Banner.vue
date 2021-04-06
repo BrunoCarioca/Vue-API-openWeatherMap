@@ -3,13 +3,13 @@
         <div class="row  q-pa-xs">  
             <q-icon name="add" class="col-2 " style="font-size: 30px;" />
             <div class="col-8 text-center">
-                <h6 class="q-ma-none">{{ list["name"] }}</h6>
+                <h6 class="q-ma-none">{{ today["name"] }}</h6>
             </div>
             <q-icon name="more_vert" class="col-2 " style="font-size: 30px;" />
         </div>
         <div class="column">
             <h1 class="q-ma-none q-pt-xl q-mt-xl text-center col-8">{{ temp }}°c</h1>
-            <h6  class="q-ma-none q-py-sm text-center col-auto test">{{ weather['description'] }}</h6>
+            <h6  class="q-ma-none q-py-sm text-center col-auto test">{{  this.today['weather'][0]['description'] }}</h6>
             <div class="col-auto q-py-sm text-center">
             <q-btn flat rounded style="background-color: rgba(240,240,240,0.3);" icon="eco" label="IQA 17"/>
             </div>
@@ -19,7 +19,8 @@
                       <q-icon name="keyboard_arrow_right" style="font-size: 28px;"></q-icon>
                   </span>
                 </div>
-                <div class="">
+                <div v-for=" infos in this.arInfo " v-bind:key="infos.id">
+                 <p>{{ infos.id }} {{ infos.icon}} {{ infos.day }} {{ infos.description }} {{ infos.temp_max }}/{{ infos.temp_min }} </p>
                 </div>
             </div>
         </div>
@@ -39,12 +40,13 @@
 <script>
     export default {
         name: 'Banner',
-        props: ['list', 'temp', 'weather'],
+        props: ['today', 'temp', 'forecast' ],
 
         data(){
             return{
                apiKey: '',
-               date:'',
+               date: '',
+               arInfo: [],
                day: '',
             }
         },
@@ -52,19 +54,39 @@
         created(){
     
             setTimeout(() => {
-              this.convertDate(this.list["dt"]);
-            },5000);
+                this.convertDate(this.forecast[2]["dt"]);
+                this.makeBanner(1, this.today['weather'][0]['icon'], "hoje", this.today['weather'][0]['description'], this.today['main']['temp_max'], this.today['main']['temp_min']);
+                this.makeBanner(2, this.forecast[1]['weather'][0]['icon'], "amanhã", this.forecast[1]['weather'][0]['description'], this.forecast[1]['temp'].max, this.forecast[1]['temp'].min);
+                this.makeBanner(3, this.forecast[2]['weather'][0]['icon'], this.day , this.forecast[2]['weather'][0]['description'], this.forecast[2]['temp'].max, this.forecast[2]['temp'].min);
+
+                console.log(this.forecast[0]['temp'].max);
+            },2500);
+           
+
         
         },
 
         methods:{
 
+            makeBanner(id, icon, day, description ,temp_max, temp_min){
+                
+                let obj = {
+                    id: id,
+                    icon: icon,
+                    day: day,
+                    description: description,
+                    temp_max: temp_max,
+                    temp_min: temp_min,
+                }
+
+                this.arInfo.push(obj);                
+                
+            },
+
             convertDate: function(dt){
-                
-            
-                this.day = new Date(dt*1000);
-                console.log(this.whatIsWeekDay(this.day.getDay()));
-                
+                this.date = new Date(dt*1000);
+                this.day = this.whatIsWeekDay(this.date.getDay());
+                console.log(this.day);   
             },
 
             whatIsWeekDay: function(number){
