@@ -4,6 +4,7 @@
       <Header></Header>
       <q-scroll-area style="height: 95vh; max-width: 394px;">
       <Banner  v-if="this.temperatura != ''"  :today="this.today" :temp="this.temperatura" :forecast="this.days" ></Banner>
+      <Hourly  v-if="this.teste" :hourly="this.hr.hourly"></Hourly>
     </q-scroll-area>
     </q-page-container>
   </q-layout>
@@ -13,6 +14,7 @@
 
 import Header from './components/Header.vue'
 import Banner from './components/Banner.vue'
+import Hourly from './components/Hourly.vue'
 
 export default {
   
@@ -21,7 +23,8 @@ export default {
 
   components: {
     Header,
-    Banner    
+    Banner,
+    Hourly    
   },
 
   data () {
@@ -35,7 +38,9 @@ export default {
       tempo: [],
       today: [],
       days: [],
+      hr: '',
       temperatura: '',
+      teste: false,
       weather: [],
       
      
@@ -47,8 +52,8 @@ export default {
     this.currentRequest();
     setTimeout(() => {
         this.temperatura = Math.round(this.today["main"]["temp"]);
-        console.log("lat: " + this.coord.city_lat + " long:" + this.coord.city_long);
         this.forecastRequest(this.coord.city_lat, this.coord.city_long);
+        this.hourlyRequest(this.coord.city_lat, this.coord.city_long);
     },3000);
 
 
@@ -77,8 +82,18 @@ export default {
         .then(tempo => {
           this.tempo = tempo;
           this.days  = tempo.daily;
-          console.log(this.days);
         });
+      }, 1000);
+    },
+
+    hourlyRequest: function (lat, long){
+      setTimeout(() => {
+        this.$http.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=metric&exclude=current,minutely,daily,alerts&lang=pt_br&appid=${this.apiKey}`)
+        .then(res => res.json())
+        .then(tempo => {
+          this.hr = tempo;
+          this.teste = true;   
+        })
       }, 1000);
     }
   }
@@ -93,7 +108,7 @@ export default {
     background-image: url('./assets/bg.jpg');
     max-width: 394px;
     background-size: cover;
-    
   }
+
 
 </style>

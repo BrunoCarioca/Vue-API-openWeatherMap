@@ -13,14 +13,20 @@
             <div class="col-auto q-py-sm text-center">
             <q-btn flat rounded style="background-color: rgba(240,240,240,0.3);" icon="eco" label="IQA 17"/>
             </div>
-            <div class="q-pt-xl">
+            <div class="q-pt-xl  ">
                 <div class="text-right q-pr-sm">
                   <span class="text-center" style="font-size: 16px">Mais detalhes 
                       <q-icon name="keyboard_arrow_right" style="font-size: 28px;"></q-icon>
                   </span>
                 </div>
-                <div v-for=" infos in this.arInfo " v-bind:key="infos.id">
-                 <p>{{ infos.id }} {{ infos.icon}} {{ infos.day }} {{ infos.description }} {{ infos.temp_max }}/{{ infos.temp_min }} </p>
+                <div v-for=" infos in this.arInfo " v-bind:key="infos.id" class="q-px-md q-pt-sm  row items-center test">
+                <span class="col-10 f15 "> 
+                    <q-icon size="md" v-bind:name="infos.icon" />
+                     {{ infos.day }} - {{ infos.description }}
+                </span>
+                <span class="col-2 f15 q-pb-xs">    
+                    {{ infos.temp_max }}° / {{ infos.temp_min }}°
+                </span> 
                 </div>
             </div>
         </div>
@@ -35,6 +41,15 @@
     .test{
         text-transform: capitalize;
     }
+
+    .f32{
+        font-size: 32px;
+    }
+
+    .f15{
+        font-size: 15px;
+    }
+
 </style>
 
 <script>
@@ -59,7 +74,7 @@
                 this.makeBanner(2, this.forecast[1]['weather'][0]['icon'], "amanhã", this.forecast[1]['weather'][0]['description'], this.forecast[1]['temp'].max, this.forecast[1]['temp'].min);
                 this.makeBanner(3, this.forecast[2]['weather'][0]['icon'], this.day , this.forecast[2]['weather'][0]['description'], this.forecast[2]['temp'].max, this.forecast[2]['temp'].min);
 
-                console.log(this.forecast[0]['temp'].max);
+                
             },2500);
            
 
@@ -72,11 +87,11 @@
                 
                 let obj = {
                     id: id,
-                    icon: icon,
+                    icon: "img:https://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/"+ icon + ".png" ,
                     day: day,
                     description: description,
-                    temp_max: temp_max,
-                    temp_min: temp_min,
+                    temp_max: Math.round(temp_max),
+                    temp_min: Math.round(temp_min),
                 }
 
                 this.arInfo.push(obj);                
@@ -85,8 +100,7 @@
 
             convertDate: function(dt){
                 this.date = new Date(dt*1000);
-                this.day = this.whatIsWeekDay(this.date.getDay());
-                console.log(this.day);   
+                this.day = this.whatIsWeekDay(this.date.getDay()); 
             },
 
             whatIsWeekDay: function(number){
