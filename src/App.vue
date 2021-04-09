@@ -5,6 +5,7 @@
       <q-scroll-area style="height: 95vh; max-width: 394px;">
       <Banner  v-if="this.temperatura != ''"  :today="this.today" :temp="this.temperatura" :forecast="this.days" ></Banner>
       <Hourly  v-if="this.teste" :hourly="this.hr.hourly"></Hourly>
+      <Timeline :gp="this.gp"></Timeline>
     </q-scroll-area>
     </q-page-container>
   </q-layout>
@@ -15,6 +16,7 @@
 import Header from './components/Header.vue'
 import Banner from './components/Banner.vue'
 import Hourly from './components/Hourly.vue'
+import Timeline from './components/Timeline.vue'
 
 export default {
   
@@ -24,7 +26,8 @@ export default {
   components: {
     Header,
     Banner,
-    Hourly    
+    Hourly,
+    Timeline    
   },
 
   data () {
@@ -39,6 +42,7 @@ export default {
       today: [],
       days: [],
       hr: '',
+      gp: '',
       temperatura: '',
       teste: false,
       weather: [],
@@ -54,6 +58,7 @@ export default {
         this.temperatura = Math.round(this.today["main"]["temp"]);
         this.forecastRequest(this.coord.city_lat, this.coord.city_long);
         this.hourlyRequest(this.coord.city_lat, this.coord.city_long);
+        this.currentRequest2(this.coord.city_lat, this.coord.city_long);
     },3000);
 
 
@@ -68,6 +73,7 @@ export default {
       .then(tempo => {
         this.tempo = tempo;
         this.today = this.tempo.list[0];
+        console.log(this.tempo.list[0].sys);
         this.weather = this.today.weather[0];
         this.coord.city_lat = this.today["coord"]["lat"];
         this.coord.city_long = this.today["coord"]["lon"];
@@ -95,6 +101,17 @@ export default {
           this.teste = true;   
         })
       }, 1000);
+    },
+
+    currentRequest2: function(lat, long){
+      setTimeout(() => {
+        this.$http.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=metric&exclude=hourly,minutely,daily,alerts&lang=pt_br&appid=${this.apiKey}`)
+        .then(res => res.json())
+        .then(tempo => {
+          this.gp = tempo;
+        })
+      }, 1000);
+
     }
   }
 

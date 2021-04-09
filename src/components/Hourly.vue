@@ -44,8 +44,6 @@
         },
         
         created(){
-            console.log(this.hourly[0].weather[0].icon);
-            
             for (let index = 0; index < 4; index++) {
                 if(index == 0){
                     this.createArray("Agora", this.hourly[index]);
@@ -53,8 +51,6 @@
                     this.createArray(this.convertHourly(this.hourly[index].dt) + " h", this.hourly[index])
                 }
             }
-        
-            console.log(this.h);
         },
 
         methods: {
