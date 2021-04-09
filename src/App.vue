@@ -5,7 +5,7 @@
       <q-scroll-area style="height: 95vh; max-width: 394px;">
       <Banner  v-if="this.temperatura != ''"  :today="this.today" :temp="this.temperatura" :forecast="this.days" ></Banner>
       <Hourly  v-if="this.teste" :hourly="this.hr.hourly"></Hourly>
-      <Timeline :gp="this.gp"></Timeline>
+      <Timeline :gp="this.gp" :pop="this.hr.hourly[0].pop"></Timeline>
     </q-scroll-area>
     </q-page-container>
   </q-layout>
@@ -73,7 +73,6 @@ export default {
       .then(tempo => {
         this.tempo = tempo;
         this.today = this.tempo.list[0];
-        console.log(this.tempo.list[0].sys);
         this.weather = this.today.weather[0];
         this.coord.city_lat = this.today["coord"]["lat"];
         this.coord.city_long = this.today["coord"]["lon"];

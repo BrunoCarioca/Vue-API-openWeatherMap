@@ -1,7 +1,7 @@
 <template>
-    <div class="bg-teste text-center white q-pa-sm ">
+    <div class="bg-teste text-center white q-my-sm q-pa-sm ">
         <q-btn flat rounded style="background-color: rgba(240,240,240,0.3);"  label="Previsão para 5 dias"/>
-        <div class="row q-pa-md">
+        <div class="row q-pa-md q-my-sm" style="background-color: rgba(55,55,55,0.8); border-radius: 5%;" >
             <div class="column col-3" v-for="hora in this.h" v-bind:key="hora.hour">
                 <span class="f12"> {{ hora.hour }} </span>
                 <span class="f12"> {{ hora.temp }}°</span>

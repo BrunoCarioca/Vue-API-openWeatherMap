@@ -14,7 +14,7 @@
 
     export default{
         name: "nascerdosol",
-        props:['sunrise','sunset'],
+        props:['sunrise','sunset','current'],
         date() {
             return{
                 x:'',
@@ -27,7 +27,7 @@
         created(){
             this.rise = this.convertHours(this.sunrise);
             this.set = this.convertHours(this.sunset);
-            this.graphicSun(this.sunset);
+            this.graphicSun(19);
         },
 
         methods: {
@@ -37,14 +37,24 @@
             },
 
             graphicSun: function(current){
-                let date = new Date (current*1000);
-                let num = parseInt(date.toLocaleTimeString().substring(0,2));
+                //let date = new Date (current*1000);
+                //let num = parseInt(date.toLocaleTimeString().substring(0,2));
+                let num = current;
                 if(num <= 6 ){
                     this.x = '20';
                     this.y = '80';
                 } else if(num >= 17 ){
                     this.x = '340';
                     this.y = '80';
+                } else if(num > 12 && num < 17){
+                    this.x = '260';
+                    this.y = '35';
+                }else if(num < 12 && num > 6){
+                    this.x = '100';
+                    this.y = '35';
+                }else{
+                    this.x = '180';
+                    this.y = '22';
                 }
             }
         }
