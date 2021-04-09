@@ -38,7 +38,7 @@
         },
 
         created(){
-            this.hour = '2';
+            console.log(this.gp.current.dt);
             
         }
     }
