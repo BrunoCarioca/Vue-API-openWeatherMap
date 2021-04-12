@@ -5,11 +5,11 @@
       :sunset="this.gp.current.sunset" 
       :current="this.gp.current.dt">
       </Nascerdosol>
-      <div class="q-py-sm q-px-md">
+      <div class="q-py-sm q-px-md" v-if="this.temp != ''"> 
           <div class="row">
                 <div class="column q-pl-md col 6">
                 <span class="text-weight-light gray">Sensação</span>
-                <h6 class="q-ma-none white">{{ temp }}°C</h6>
+                <h6 class="q-ma-none white">{{ this.temp }}°C</h6>
                 </div>
                 <div class="column q-pl-xl col 6">
                 <span class="text-weight-light gray">Umidade</span>

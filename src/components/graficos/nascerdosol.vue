@@ -27,7 +27,7 @@
         created(){
             this.rise = this.convertHours(this.sunrise);
             this.set = this.convertHours(this.sunset);
-            this.graphicSun(19);
+            this.graphicSun(this.current);
         },
 
         methods: {
@@ -37,9 +37,8 @@
             },
 
             graphicSun: function(current){
-                //let date = new Date (current*1000);
-                //let num = parseInt(date.toLocaleTimeString().substring(0,2));
-                let num = current;
+                let date = new Date (current*1000);
+                let num = parseInt(date.toLocaleTimeString().substring(0,2));
                 if(num <= 6 ){
                     this.x = '20';
                     this.y = '80';
